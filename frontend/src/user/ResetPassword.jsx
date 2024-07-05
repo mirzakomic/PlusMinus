@@ -2,6 +2,7 @@ import axios from "axios";
 import axiosInstance from "../utils/axiosInstance"
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import Button from "../components/Button";
 
 /**
  * Depending on the presents of the necessary
@@ -51,10 +52,10 @@ function RequestReset() {
   return confirmed ? (
     <p>An Email with a Password reset link has been send.Check your inbox.</p>
   ) : (
-    <form onSubmit={handleSubmit}>
+    <form id="auth" onSubmit={handleSubmit}>
       <input name="email" type="email" placeholder="Your email address" />
       {error && <small style={{ color: "red" }}>{error}</small>}
-      <button>Send Reset Mail</button>
+      <Button>Send Reset Mail</Button>
     </form>
   );
 }

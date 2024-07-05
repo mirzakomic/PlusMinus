@@ -15,21 +15,26 @@ const Button = ({
 }) => {
   const baseClass = 'inline-flex items-center justify-center font-medium transition duration-300';
   const variantMap = {
-      primary: 'bg-primary text-lightBabyBlue  hover:bg-secondary hover:text-primary',
-      secondary: 'bg-secondary text-primary hover:bg-gray-600',
-      tertiary: 'bg-tertiary text-white hover:bg-black',
+      primary: 'bg-primary text-secondary  hover:bg-secondary hover:text-primary shadow-lg',
+      secondary: 'bg-secondary text-primary hover:bg-primary hover:text-secondary shadow-lg',
+      accent: 'bg-tertiary text-white hover:bg-black shadow-lg',
   };
   const sizeMap = {
-    big: 'py-3 px-6 text-lg',
-    small: 'py-2 px-4 text-sm',
-    bigBall: 'p-3'
+    big: 'h-14 px-5 py-5 text-lg',
+    small: 'h-10 px-5 text-sm',
+    circle: 'p-0'
+  }
+  const shapeMap = {
+    roundedFull: 'rounded-full',
+    xl: 'rounded-2xl',
+    xxl: 'rounded-3xl',
+    xxxl: 'rounded-4xl',
+    no: ''
   }
   const variantClass = variantMap[variant] || primary;
   const sizeClass = sizeMap[size] || big;
   const fontSizeClass = fontSize || '';
-  const shapeClass = shape === 'round' 
-    ? 'rounded-full' 
-    : 'rounded-md';
+  const shapeClass = shapeMap[shape] || '';
   const disabledClass = disabled 
     ? 'opacity-50 cursor-not-allowed' 
     : '';
@@ -60,10 +65,10 @@ Button.propTypes = {
   children: PropTypes.node.isRequired,
   onClick: PropTypes.func,
   disabled: PropTypes.bool,
-  variant: PropTypes.oneOf(['primary', 'secondary', 'tertiary']),
+  variant: PropTypes.oneOf(['primary', 'secondary', 'accent']),
   size: PropTypes.oneOf(['small', 'big', 'bigBall']),
   fontSize: PropTypes.string,
-  shape: PropTypes.oneOf(['round', 'square']),
+  shape: PropTypes.oneOf(['roundedFull', 'xl', 'xxl', 'xxxl', 'no']),
   href: PropTypes.string,
   type: PropTypes.oneOf(['button', 'submit', 'reset']),
 };

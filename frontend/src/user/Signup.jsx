@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../utils/axiosInstance"
+import Button from "../components/Button";
 
 
 export default function Signup({onSignupSuccess}) {
@@ -29,12 +30,13 @@ export default function Signup({onSignupSuccess}) {
   };
 
   return (
-    <form onSubmit={submit}>
+    <form id="auth" className="flex flex-col gap-4" onSubmit={submit}>
+      <h2 className="text-2xl text-secondary font-light">Create a new account</h2>
       <input name="name" type="text" placeholder="Your name" />
       <input name="email" type="text" placeholder="your email" />
       <input name="password" type="password" placeholder="***********" />
       {error && <small style={{ color: "red" }}>{error}</small>}
-      <button>Signup</button>
+      <Button variant="primary" size="big">Create account</Button>
     </form>
   );
 }

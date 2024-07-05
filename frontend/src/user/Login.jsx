@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { UserContext } from "../providers/UserContext";
 import axiosInstance from "../utils/axiosInstance";
+import Button from "../components/Button";
 
 export default function Login() {
   const { refetch } = useContext(UserContext);
@@ -28,12 +29,13 @@ export default function Login() {
   };
 
   return (
-    <form onSubmit={submit}>
+    <form id="auth" className="flex flex-col gap-4" onSubmit={submit}>
+      <h2 className="text-2xl text-secondary font-light">Log in with your account</h2>
       <input name="email" type="email" placeholder="your email" />
       <input name="password" type="password" placeholder="***********" />
       {error && <small style={{ color: "red" }}>{error}</small>}
-      <button>Login</button>
-      <Link to={"/resetPassword"}>Forgot password</Link>
+      <Button variant="primary" size="big">Login</Button>
+      <Link className="text-secondary" to={"/resetPassword"}>Forgot password?</Link>
     </form>
   );
 }
