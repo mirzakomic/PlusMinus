@@ -26,7 +26,7 @@ const defaultOptions = {
 export const sendMail = async ({ to, subject, html } = defaultOptions) => {
   try {
     const message = {
-      from: 'Mailgun Sandbox <postmaster@sandbox94b8b558c0274ec0bce2159e5f7f1c15.mailgun.org>',
+      from: `${process.env.MAILGUN_DOMAIN}`,
       to: to,
       subject: subject,
       html: html,

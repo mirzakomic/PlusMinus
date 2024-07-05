@@ -34,8 +34,8 @@ export default function Login() {
       <input name="email" type="email" placeholder="your email" />
       <input name="password" type="password" placeholder="***********" />
       {error && <small style={{ color: "red" }}>{error}</small>}
-      <Button variant="primary" size="big">Login</Button>
-      <Link className="text-secondary" to={"/resetPassword"}>Forgot password?</Link>
+      <Button type="submit" variant="primary" size="big">Login</Button>
+      {/* <Link className="text-secondary" to={"/resetPassword"}>Forgot password?</Link> */}
     </form>
   );
 }

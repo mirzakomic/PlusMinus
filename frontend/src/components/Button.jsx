@@ -11,7 +11,7 @@ const Button = ({
   fontSize, 
   shape, 
   href, 
-  type 
+  type
 }) => {
   const baseClass = 'inline-flex items-center justify-center font-medium transition duration-300';
   const variantMap = {

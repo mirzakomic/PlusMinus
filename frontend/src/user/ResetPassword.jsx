@@ -52,10 +52,10 @@ function RequestReset() {
   return confirmed ? (
     <p>An Email with a Password reset link has been send.Check your inbox.</p>
   ) : (
-    <form id="auth" onSubmit={handleSubmit}>
+    <form id="auth" className="flex flex-col gap-4" onSubmit={handleSubmit}>
       <input name="email" type="email" placeholder="Your email address" />
       {error && <small style={{ color: "red" }}>{error}</small>}
-      <Button>Send Reset Mail</Button>
+      <Button type="submit" size="big">Send Reset Mail</Button>
     </form>
   );
 }
@@ -84,7 +84,7 @@ function ConfirmReset({ id, token }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form id="auth" className="flex flex-col gap-4" onSubmit={handleSubmit}>
       <input name="password" type="password" placeholder="your password" />
       <input
         name="password-confirm"
@@ -92,7 +92,7 @@ function ConfirmReset({ id, token }) {
         placeholder="your password"
       />
       {error && <small style={{ color: "red" }}>{error}</small>}
-      <button>Confirm new Password</button>
+      <Button type="submit" size="big">Confirm new Password</Button>
     </form>
   );
 }
