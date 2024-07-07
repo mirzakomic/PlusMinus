@@ -23,7 +23,7 @@ const Navigation = () => {
   return (
     <>
       {isLoggedIn && (
-        <nav className="bg-paleLilac p-5 rounded-3xl shadow-md text-2xl font-poppinsRegular flex justify-between">
+        <nav className="bg-black p-5 rounded-3xl shadow-md text-2xl flex justify-between fixed bottom-5 desktop:w-[40rem] phone:w-full phone:bottom-0 phone:rounded-none">
           <div className="flex items-center gap-5 mr-5">
             <NavItem to="/profile">Profile</NavItem>
             <NavItem to="/" onClick={logout}>Logout</NavItem>
@@ -45,9 +45,11 @@ const Navigation = () => {
               </p>
             </div>
             <div className="justify-center flex flex-col w-auto p-5">
-              {activeForm === "login" && <Login />}
-              {activeForm === "signup" && <Signup onSignupSuccess={handleSignupSuccess} />}
-              {activeForm === "resetPassword" && <ResetPassword />}
+                  <div>
+                    {activeForm === "login" && <Login />}
+                    {activeForm === "signup" && <Signup onSignupSuccess={handleSignupSuccess} />}
+                    {activeForm === "resetPassword" && <ResetPassword />}
+                  </div>
               <div className="p-4 flex justify-center">
                 {activeForm !== "resetPassword" && (
                   <Button

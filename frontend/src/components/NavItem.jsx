@@ -5,7 +5,7 @@ import { Link, NavLink } from 'react-router-dom';
 
 const NavItem = ({ className, onClick, children, to }) => {
   // Default class names
-  const defaultClassName = "hover:bg-primary p-3 rounded-2xl transition-all";
+  const defaultClassName = "text-white uppercase font-bold text-sm hover:bg-secondary hover:text-primary p-3 rounded-2xl transition-all";
   
   return (
     <NavLink 

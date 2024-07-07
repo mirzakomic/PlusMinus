@@ -19,7 +19,7 @@ function App() {
   const { isLoggedIn, logout } = useContext(UserContext);
 
   return (
-    <>
+    <div className="flex justify-center max-w-4xl mx-auto my-0">
       <Navigation />
       {/* <nav>
         <a href="/">Home</a>
@@ -49,7 +49,7 @@ function App() {
           <Route path="/passwordReset" element={<ResetPassword />} />
         </Routes>
       </main>
-    </>
+    </div>
   );
 }
 
