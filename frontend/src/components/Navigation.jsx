@@ -25,7 +25,9 @@ const Navigation = () => {
       {isLoggedIn && (
         <nav className="bg-black p-5 rounded-3xl shadow-md text-2xl flex justify-between fixed bottom-5 desktop:w-[40rem] phone:w-full phone:bottom-0 phone:rounded-none">
           <div className="flex items-center gap-5 mr-5">
-            <NavItem to="/profile">Profile</NavItem>
+            <NavItem to="/dashboard">Dashboard</NavItem>
+            <NavItem to="/stats">Statistics</NavItem>
+            <NavItem to="/goals">Goals</NavItem>
             <NavItem to="/" onClick={logout}>Logout</NavItem>
           </div>
         </nav>

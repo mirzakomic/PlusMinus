@@ -8,6 +8,9 @@ import Home from "./pages/Home";
 import Signup from "./user/Signup";
 import Login from "./user/Login";
 import Profile from "./pages/Profile";
+import Dashboard from "./pages/Dashboard";
+import Stats from "./pages/Stats";
+import Goals from "./pages/Goals";
 
 import "./App.css";
 import ResetPassword from "./user/ResetPassword";
@@ -41,6 +44,9 @@ function App() {
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/stats" element={<Stats />} />
+          <Route path="/goals" element={<Goals />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/verify-email" element={<VerifyEmail />} />

@@ -19,9 +19,12 @@ export default function Login() {
     const data = new FormData(e.currentTarget);
     try {
       await axiosInstance.post("/user/login", data);
-      refetch();
-      console.log("navigiert jetzt");
-      nav("/");
+      if (data) {
+        refetch();
+        console.log("navigiert jetzt");
+        nav("/dashboard");
+      } 
+      console.log( "no data");
     } catch (e) {
       console.log(e);
       setError("An Error occured, try again later");

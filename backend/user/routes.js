@@ -5,9 +5,20 @@ import crypto from 'crypto';
 import { default as FormData } from 'form-data';
 import Mailgun from "mailgun.js";
 import User from "./models/userModel.js";
+import Expense from './models/expenseModel.js';
+import Subscription from './models/subscriptionModel.js';
+import Goal from './models/goalModel.js';
 import { authenticateToken, generateAccessToken } from "./authToken.js";
 import { createResetToken, validateResetToken } from "./models/resetTokenModel.js";
 import dotenv from "dotenv"
+import cors from "cors";
+
+// const corsOptions = {
+//   origin: 'http://localhost:3000',
+//   credentials: true,
+// };
+
+// app.use(cors(corsOptions));
 
 const __dirname = path.resolve();
 const envPath = `.env.${process.env.NODE_ENV || 'development'}`;
@@ -197,5 +208,31 @@ userRouter.get("/secure", authenticateToken, async (req, res) => {
   } catch (error) {
     console.error("secure throws an error",error);
     res.status(500).send({ error: "Internal server error" });
+  }
+});
+
+userRouter.get('/customcategoryfetch', authenticateToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    res.send({ customCategories: user.customCategories });
+  } catch (error) {
+    console.error("Error fetching custom categories", error);
+    res.status(500).send({ error: "Internal server error" });
+  }
+});
+
+userRouter.post('/customcategory', authenticateToken, async (req, res) => {
+  try {
+    const { userId, category } = req.body;
+    const user = await User.findById(userId);
+    console.log('Received request to add custom category:', { userId, category });
+    if (user.customCategories.includes(category)) {
+      return res.status(400).send('Category already exists.');
+    }
+    user.customCategories.push(category);
+    await user.save();
+    res.status(201).send(user.customCategories);
+  } catch (error) {
+    res.status(500).send(error.message);
   }
 });

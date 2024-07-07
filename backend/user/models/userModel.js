@@ -30,6 +30,7 @@ export const userSchema = new Schema({
   hash: { type: String, required: true, select: false },
   isVerified: { type: Boolean, default: false },
   verificationToken: { type: String, select: false },
+  customCategories: { type: [String], default: [] }
 });
 
 userSchema.methods.setPassword = function (password) {

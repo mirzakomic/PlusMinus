@@ -5,10 +5,11 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import cors from 'cors';
 import { userRouter } from "./user/routes.js";
+import { expensesRouter } from "./user/expensesRouter.js";
 
 const __dirname = path.resolve();
 
-const ReactAppDistPath = path.join(__dirname, 'frontend', 'dist');
+const ReactAppDistPath = path.join(__dirname, '..', 'frontend', 'dist');
 const ReactAppIndex = path.join(ReactAppDistPath, 'index.html');
 
 const envPath = `.env.${process.env.NODE_ENV || 'development'}`;
@@ -27,31 +28,41 @@ async function connectDB() {
 }
 connectDB();
 
+const app = express();
 const PORT = process.env.PORT || 3001;
 const baseUrl = process.env.BASE_FE_URL || 'http://localhost:3000';
 
-const app = express();
+const corsOptions = {
 
-app.use(cors({
-  origin: process.env.BASE_FE_URL,
-  credentials: true
-}));
+  origin: 'http://localhost:3000', // Frontend URL
+  credentials: true, // Allow credentials (cookies) to be sent
+};
+
+
+app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use(cookieParser());
 
 
 app.use(express.static(ReactAppDistPath));
+// app.use((req, res, next) => {
+//   console.log('Request Origin:', req.headers.origin);
+//   console.log('Request URL:', req.originalUrl);
+//   next();
+// });
 
 app.use("/api/user", userRouter);
+app.use("/api/expenses", expensesRouter);
 
 app.get("/api/status", (req, res) => {
   res.send({ status: "Ok" });
 });
 
 app.get('/*', (req, res) => {
-  res.redirect(`${baseUrl}${req.originalUrl}`);
+  res.sendFile(path.join(ReactAppDistPath, 'index.html')); // Updated path
 });
+
 
 app.listen(PORT, () => {
   console.log(`Server running in ${process.env.NODE_ENV} mode on port`, PORT);

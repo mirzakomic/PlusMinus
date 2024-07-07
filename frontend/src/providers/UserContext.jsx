@@ -10,6 +10,12 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  //* Finance States
+  const [expenses, setExpenses] = useState([]);
+  const [subscriptions, setSubscriptions] = useState([]);
+  const [goals, setGoals] = useState([]);
+  const [customCategories, setCustomCategories] = useState([]);
+
   const refetch = () => _refetch((prev) => !prev);
 
   const logout = async () => {
@@ -30,12 +36,21 @@ export const UserProvider = ({ children }) => {
       try {
         const { data } = await axiosInstance.get('/user/secure');
         setUser(data);
-        console.log('User data fetched:', data);
         setIsLoggedIn(true);
-        console.log(isLoggedIn, "user eingeloggt?");
+
+        const expensesResponse = await axiosInstance.get('/expenses/expenses');
+        setExpenses(expensesResponse.data);
+
+        const customCatResponse = await axiosInstance.get('/user/customcategoryfetch');
+        setCustomCategories(customCatResponse.data.customCategories);
+
+        const subscriptionsResponse = await axiosInstance.get('/expenses/subscriptions');
+        setSubscriptions(subscriptionsResponse.data);
+
+        const goalsResponse = await axiosInstance.get('/expenses/goals');
+        setGoals(goalsResponse.data);
       } catch (error) {
         setUser(null);
-        console.log('Error fetching user data:', error);
         setIsLoggedIn(false);
       }
     };
@@ -43,7 +58,7 @@ export const UserProvider = ({ children }) => {
   }, [shouldRefetch]);
 
   return (
-    <UserContext.Provider value={{ user, isLoggedIn, refetch, logout }}>
+    <UserContext.Provider value={{ user, setUser, isLoggedIn, refetch, logout, expenses, setExpenses, subscriptions, setSubscriptions, goals, setGoals, customCategories, setCustomCategories }}>
       {children}
     </UserContext.Provider>
   );

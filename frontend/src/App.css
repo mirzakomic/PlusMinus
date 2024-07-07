@@ -22,3 +22,8 @@
 .form-container {
   transition: height 500ms ease-in-out;
 }
+
+.dashboard input, .dashboard select {
+  padding: 0.5rem;
+  border: 0px;
+}
