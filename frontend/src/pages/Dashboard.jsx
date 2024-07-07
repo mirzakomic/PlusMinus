@@ -3,12 +3,14 @@ import { UserContext }from '../providers/UserContext';
 import axiosInstance from '../utils/axiosInstance';
 import Button from '../components/Button';
 import ListItem from '../components/ListItem';
+import Background from '../assets/images/meshgradientbg.svg'
 
 const Dashboard = () => {
   const { user, setUser, expenses, setExpenses, subscriptions, setSubscriptions, customCategories,
     setCustomCategories } = useContext(UserContext);
   const [newExpense, setNewExpense] = useState({ category: '', description: '', amount: '' });
   const [showSubscriptions, setShowSubscriptions] = useState(false);
+  const [showAddCustomCat, setShowAddCustomCat] = useState(false);
   const [customCategory, setCustomCategory] = useState('');
   const [categories, setCategories] = useState([]);
   const expenseFields = ['category', 'description', 'amount']; 
@@ -45,11 +47,13 @@ useEffect(() => {
   };
 
   const toggleSubscriptions = () => setShowSubscriptions(!showSubscriptions);
+  const toggleAddCustomCat = () => setShowAddCustomCat(!showAddCustomCat);
 
   return (
     <div className="dashboard">
       <h1>Financial Dashboard</h1>
-      <form className='bg-slate-500' onSubmit={addExpense}>
+      <div style={{ backgroundImage: `url(${Background})` }} className='w-full bg-cover flex'>
+      <form className='gap-3 flex flex-col' onSubmit={addExpense}>
       <select
           value={newExpense.category}
           onChange={(e) => setNewExpense({ ...newExpense, category: e.target.value })}
@@ -61,15 +65,20 @@ useEffect(() => {
             </option>
           ))}
         </select>
+        <Button size="small" onClick={toggleAddCustomCat}>{!showAddCustomCat ? 'Add custom category' : 'Hide custom category'}</Button>
+        {showAddCustomCat && (
+          <>
         <input
-          type="text"
-          placeholder="New Category"
-          value={customCategory}
-          onChange={(e) => setCustomCategory(e.target.value)}
-        />
+        type="text"
+        placeholder="New Category"
+        value={customCategory}
+        onChange={(e) => setCustomCategory(e.target.value)}
+      />
         <Button type="button" onClick={addCustomCategory}>
           Add Custom Category
         </Button>
+        </>
+      )}
         <input
           type="text"
           placeholder="Description"
@@ -84,6 +93,7 @@ useEffect(() => {
         />
         <Button type="submit">Add Expense</Button>
       </form>
+      </div>
 
       <Button onClick={toggleSubscriptions}>
         {showSubscriptions ? 'Hide Subscriptions' : 'Manage Subscriptions'}

@@ -23,14 +23,19 @@ const Navigation = () => {
   return (
     <>
       {isLoggedIn && (
-        <nav className="bg-black p-5 rounded-3xl shadow-md text-2xl flex justify-between fixed bottom-5 desktop:w-[40rem] phone:w-full phone:bottom-0 phone:rounded-none">
-          <div className="flex items-center gap-5 mr-5">
-            <NavItem to="/dashboard">Dashboard</NavItem>
-            <NavItem to="/stats">Statistics</NavItem>
-            <NavItem to="/goals">Goals</NavItem>
-            <NavItem to="/" onClick={logout}>Logout</NavItem>
+        <nav className="bg-black p-5 rounded-3xl shadow-md text-2xl fixed bottom-5 left-0 right-0 mx-auto max-w-screen-md">
+          <div className="flex items-center justify-between">
+            <div className="flex-1 flex items-center gap-5">
+              <NavItem to="/dashboard">Dashboard</NavItem>
+              <NavItem to="/stats">Statistics</NavItem>
+              <NavItem to="/goals">Goals</NavItem>
+            </div>
+            <div className="flex items-center gap-5">
+              <NavItem to="/profile">Profile</NavItem>
+              <NavItem to="/" onClick={logout}>Logout</NavItem>
+            </div>
           </div>
-        </nav>
+</nav>
       )}
       {!isLoggedIn && (
         <div className="p-10 flex items-center justify-center h-screen w-screen">

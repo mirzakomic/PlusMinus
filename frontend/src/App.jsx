@@ -22,25 +22,8 @@ function App() {
   const { isLoggedIn, logout } = useContext(UserContext);
 
   return (
-    <div className="flex justify-center max-w-4xl mx-auto my-0">
+    <div className="max-w-4xl mx-auto my-0">
       <Navigation />
-      {/* <nav>
-        <a href="/">Home</a>
-        {!isLoggedIn && (
-          <>
-            <a href="/signup">Signup</a>
-            <a href="/login">Login</a>
-          </>
-        )}
-        {isLoggedIn && (
-          <>
-            <a href="/profile">Profile</a>
-            <button type="button" onClick={logout}>
-              Logout
-            </button>
-          </>
-        )}
-      </nav> */}
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
