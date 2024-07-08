@@ -236,3 +236,22 @@ userRouter.post('/customcategory', authenticateToken, async (req, res) => {
     res.status(500).send(error.message);
   }
 });
+
+userRouter.post('/setbalance', authenticateToken, async (req, res) => {
+  const { balance, monthlyIncome } = req.body;
+  try {
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    user.balance = balance;
+    user.monthlyIncome = monthlyIncome;
+    await user.save();
+
+    res.status(200).send({ balance: user.balance, monthlyIncome: user.monthlyIncome });
+  } catch (error) {
+    res.status(500).send({ error: 'Failed to set balance and monthly income' });
+  }
+});

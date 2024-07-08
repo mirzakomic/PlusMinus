@@ -28,16 +28,16 @@ const hoursInMillisec = (hours) => {
 };
 
 console.log(`Mailgun domain: ${process.env.MAILGUN_DOMAIN}`);
-expensesRouter.post('/expenses', authenticateToken, async (req, res) => {
-    const { category, description, amount } = req.body;
-    try {
-      const expense = new Expense({ category, description, amount, user: req.user.id });
-      await expense.save();
-      res.status(201).send(expense);
-    } catch (error) {
-      res.status(500).send({ error: 'Failed to create expense' });
-    }
-  });
+// expensesRouter.post('/expenses', authenticateToken, async (req, res) => {
+//     const { category, description, amount } = req.body;
+//     try {
+//       const expense = new Expense({ category, description, amount, user: req.user.id });
+//       await expense.save();
+//       res.status(201).send(expense);
+//     } catch (error) {
+//       res.status(500).send({ error: 'Failed to create expense' });
+//     }
+//   });
   
   expensesRouter.get('/expenses', authenticateToken, async (req, res) => {
     try {
@@ -47,6 +47,29 @@ expensesRouter.post('/expenses', authenticateToken, async (req, res) => {
       res.status(500).send({ error: 'Failed to fetch expenses' });
     }
   });
+
+expensesRouter.post('/expenses', authenticateToken, async (req, res) => {
+  const { category, description, amount } = req.body;
+  try {
+    const user = await User.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    // Create new expense
+    const expense = new Expense({ category, description, amount, user: req.user.id });
+    await expense.save();
+
+    // Update user balance
+    user.balance -= amount;
+    await user.save();
+
+    res.status(201).send({ expense, newBalance: user.balance });
+  } catch (error) {
+    res.status(500).send({ error: 'Failed to create expense' });
+  }
+});
   
   expensesRouter.put('/expenses/:id', authenticateToken, async (req, res) => {
     const { id } = req.params;
