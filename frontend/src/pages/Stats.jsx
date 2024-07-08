@@ -82,7 +82,9 @@ const Stats = () => {
   return (
     <div className="chart-container">
       <h1>Statistics</h1>
+      <div className='max-w-md mx-auto mt-20'>
       <Doughnut data={chartData} />
+      </div>
     </div>
   );
 };

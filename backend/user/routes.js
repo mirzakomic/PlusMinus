@@ -237,6 +237,21 @@ userRouter.post('/customcategory', authenticateToken, async (req, res) => {
   }
 });
 
+userRouter.put('/income', authenticateToken, async (req, res) => {
+  const { monthlyIncome } = req.body;
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+    user.monthlyIncome = monthlyIncome;
+    await user.save();
+    res.status(200).send(user);
+  } catch (error) {
+    res.status(500).send({ error: 'Failed to update monthly income' });
+  }
+});
+
 userRouter.post('/setbalance', authenticateToken, async (req, res) => {
   const { balance, monthlyIncome } = req.body;
   try {

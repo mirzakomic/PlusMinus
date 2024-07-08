@@ -20,12 +20,24 @@ useEffect(() => {
     setCategories([...predefinedCategories, ...customCategories]);
   }, [customCategories]);
 
+  // const addExpense = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await axiosInstance.post('/expenses/expenses', newExpense);
+  //     setExpenses([...expenses, response.data]);
+  //     setNewExpense({ category: '', description: '', amount: '' });
+  //   } catch (error) {
+  //     console.error('Error adding expense:', error);
+  //   }
+  // };
+
   const addExpense = async (e) => {
     e.preventDefault();
     try {
       const response = await axiosInstance.post('/expenses/expenses', newExpense);
-      setExpenses([...expenses, response.data]);
+      setExpenses([...expenses, response.data.expense]);
       setNewExpense({ category: '', description: '', amount: '' });
+      setUser({ ...user, balance: response.data.newBalance });
     } catch (error) {
       console.error('Error adding expense:', error);
     }
