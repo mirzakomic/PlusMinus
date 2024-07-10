@@ -22,9 +22,9 @@ function App() {
   const { isLoggedIn, logout } = useContext(UserContext);
 
   return (
-    <div className="max-w-4xl mx-auto my-0">
+    <div className="mx-auto my-0">
       <Navigation />
-      <main>
+      <main className="max-w-4xl mx-auto">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/dashboard" element={<Dashboard />} />
