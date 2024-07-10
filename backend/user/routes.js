@@ -252,6 +252,19 @@ userRouter.put('/income', authenticateToken, async (req, res) => {
   }
 });
 
+userRouter.get('/incomefetch', authenticateToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).send({ error: 'User not found' });
+    }
+    res.status(200).send({ monthlyIncomeValue: user.monthlyIncome });
+  } catch (error) {
+    console.error('Error fetching monthly income:', error); // Optional: Log error for debugging
+    res.status(500).send({ error: 'Failed to fetch monthly income' });
+  }
+});
+
 userRouter.post('/setbalance', authenticateToken, async (req, res) => {
   const { balance, monthlyIncome } = req.body;
   try {

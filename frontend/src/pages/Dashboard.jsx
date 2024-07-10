@@ -7,7 +7,7 @@ import Background from '../assets/images/meshgradientbg.svg'
 
 const Dashboard = () => {
   const { user, setUser, expenses, setExpenses, subscriptions, setSubscriptions, customCategories,
-    setCustomCategories } = useContext(UserContext);
+    setCustomCategories, income } = useContext(UserContext);
   const [newExpense, setNewExpense] = useState({ category: '', description: '', amount: '' });
   const [showSubscriptions, setShowSubscriptions] = useState(false);
   const [showAddCustomCat, setShowAddCustomCat] = useState(false);
@@ -19,17 +19,6 @@ const Dashboard = () => {
 useEffect(() => {
     setCategories([...predefinedCategories, ...customCategories]);
   }, [customCategories]);
-
-  // const addExpense = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const response = await axiosInstance.post('/expenses/expenses', newExpense);
-  //     setExpenses([...expenses, response.data]);
-  //     setNewExpense({ category: '', description: '', amount: '' });
-  //   } catch (error) {
-  //     console.error('Error adding expense:', error);
-  //   }
-  // };
 
   const addExpense = async (e) => {
     e.preventDefault();
@@ -61,11 +50,18 @@ useEffect(() => {
   const toggleSubscriptions = () => setShowSubscriptions(!showSubscriptions);
   const toggleAddCustomCat = () => setShowAddCustomCat(!showAddCustomCat);
 
+    // Calculate total expenses
+    const totalExpenses = expenses.reduce((acc, expense) => acc + parseFloat(expense.amount || 0), 0);
+
+    // Calculate balance
+    const balance = income ? (income - totalExpenses) : -totalExpenses;
+
   return (
     <div className="dashboard">
       <h1>Financial Dashboard</h1>
       <div style={{ backgroundImage: `url(${Background})` }} className='w-full bg-cover flex'>
       <form className='gap-3 flex flex-col' onSubmit={addExpense}>
+        <div className='flex flex-row gap-3'>
       <select
           value={newExpense.category}
           onChange={(e) => setNewExpense({ ...newExpense, category: e.target.value })}
@@ -77,7 +73,7 @@ useEffect(() => {
             </option>
           ))}
         </select>
-        <Button size="small" onClick={toggleAddCustomCat}>{!showAddCustomCat ? 'Add custom category' : 'Hide custom category'}</Button>
+        <Button size="small" onClick={toggleAddCustomCat}>{!showAddCustomCat ? '+ custom category' : '- custom category'}</Button>
         {showAddCustomCat && (
           <>
         <input
@@ -91,6 +87,7 @@ useEffect(() => {
         </Button>
         </>
       )}
+      </div>
         <input
           type="text"
           placeholder="Description"
@@ -117,6 +114,10 @@ useEffect(() => {
         </div>
       )}
 
+<h3>Monthly Income:</h3>
+      <h3>{income}</h3>
+      <h3>Balance:</h3>
+      <h3>{balance}</h3> {/* Display the calculated balance */}
       <div className="expenses-list">
         {expenses.map((expense) => (
           <ListItem key={expense._id} fields={expenseFields} data={expense} />

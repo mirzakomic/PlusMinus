@@ -70,6 +70,29 @@ expensesRouter.post('/expenses', authenticateToken, async (req, res) => {
     res.status(500).send({ error: 'Failed to create expense' });
   }
 });
+
+expensesRouter.get('/expensereport', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const start = new Date();
+    start.setDate(1);
+    start.setHours(0, 0, 0, 0);
+
+    const end = new Date(start);
+    end.setMonth(start.getMonth() + 1);
+
+    const expenses = await Expense.find({
+      userId,
+      date: { $gte: start, $lt: end }
+    });
+
+    const totalExpenses = expenses.reduce((acc, expense) => acc + expense.amount, 0);
+    res.status(200).json({ totalExpenses });
+  } catch (error) {
+    res.status(500).send({ error: 'Failed to fetch monthly expenses' });
+  }
+});
+
   
   expensesRouter.put('/expenses/:id', authenticateToken, async (req, res) => {
     const { id } = req.params;

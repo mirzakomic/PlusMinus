@@ -11,7 +11,8 @@ export default {
         "secondary": "#fff",
         "accent": "#64419D",
         "limeGreen": "#85E19A",
-        "flamingo": "#E18585"
+        "flamingo": "#E18585",
+        "paperGrey": "#f6f6f6"
       },
       screens: {
         "phone": {"max": "480px"},

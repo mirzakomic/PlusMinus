@@ -1,37 +1,40 @@
-import React, { useContext, useState } from 'react';
-import axiosInstance from '../utils/axiosInstance';
-import { UserContext } from '../providers/UserContext';
+import React, { useContext, useEffect, useState } from 'react';
+import { UserContext } from '../providers/UserContext'; // Import the context
 import Button from '../components/Button';
 
-const UpdateIncome = () => {
-  const { user, setUser } = useContext(UserContext);
-  const [monthlyIncome, setMonthlyIncome] = useState(user.monthlyIncome || 0);
+const Profile = () => {
+  const { income, updateIncome } = useContext(UserContext); // Access income and updateIncome from context
+  const [monthlyIncome, setMonthlyIncome] = useState(income || 0);
+
+  useEffect(() => {
+    if (income !== null) {
+      setMonthlyIncome(income);
+    }
+  }, [income]);
 
   const handleIncomeUpdate = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axiosInstance.put('/user/income', { monthlyIncome });
-      setUser(response.data);
-    } catch (error) {
-      console.error('Error updating monthly income:', error);
-    }
+    await updateIncome(monthlyIncome); // Call the updateIncome function from context
   };
 
   return (
-    <div>
+    <section>
+      <div className="mt-10 space-y-3">
       <h1>Profile</h1>
-      <h2>Update Monthly Income</h2>
-      <form onSubmit={handleIncomeUpdate}>
+      <h3>Update Monthly Income</h3>
+      <form className='dashboard bg-paperGrey flex rounded-xl' onSubmit={handleIncomeUpdate}>
         <input
           type="number"
           value={monthlyIncome}
           onChange={(e) => setMonthlyIncome(e.target.value)}
-          placeholder="Enter monthly income"
+          placeholder={monthlyIncome}
         />
-        <Button type="submit">Update Income</Button>
+        <Button variant="primary" shape="xl" type="submit">Update Income</Button>
+        <br></br>
       </form>
-    </div>
+      </div>
+    </section>
   );
 };
 
-export default UpdateIncome;
+export default Profile;
