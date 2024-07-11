@@ -17,7 +17,6 @@ const Goals = () => {
   const addGoal = async (e) => {
     e.preventDefault();
     try {
-      // Post to the correct endpoint for goals
       const response = await axiosInstance.post('/expenses/goals', newGoal);
       setGoals([...goals, response.data]);
       // Clear the form
@@ -28,7 +27,16 @@ const Goals = () => {
         targetDate: ''
       });
     } catch (error) {
-      console.error('Error adding goal:', error);
+      console.error('Error adding expense:', error);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await axiosInstance.delete(`/expenses/goals/${id}`);
+      setGoals(goals.filter(goals => goals._id !== id));
+    } catch (error) {
+      console.error('Error deleting goals:', error);
     }
   };
 
@@ -65,7 +73,7 @@ const Goals = () => {
 
       <div className="goals-list">
         {goals.map((goal) => (
-          <ListItem key={goal._id} fields={goalFields} data={goal} />
+          <ListItem key={goal._id} fields={goalFields} data={goal} onDelete={handleDelete} />
         ))}
       </div>
     </div>

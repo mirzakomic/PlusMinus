@@ -34,7 +34,7 @@ const ListItem = ({ fields, data, onDelete }) => {
             onClick={() => onDelete(data._id)}
             className="opacity-0 group-hover:opacity-100"
             showToast={true}
-            toastText="Expense has been deleted"
+            toastText="Item has been deleted"
           >
             X</Button>
     </div>
