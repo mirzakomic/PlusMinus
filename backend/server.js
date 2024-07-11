@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import cors from 'cors';
 import { userRouter } from "./user/routes.js";
 import { expensesRouter } from "./user/expensesRouter.js";
+import { incomeRouter } from "./user/incomeRoutes.js";
 
 const __dirname = path.resolve();
 
@@ -54,6 +55,7 @@ app.use(express.static(ReactAppDistPath));
 
 app.use("/api/user", userRouter);
 app.use("/api/expenses", expensesRouter);
+app.use("/api/income", incomeRouter);
 
 app.get("/api/status", (req, res) => {
   res.send({ status: "Ok" });

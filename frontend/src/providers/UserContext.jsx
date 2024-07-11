@@ -16,6 +16,8 @@ export const UserProvider = ({ children }) => {
   const [goals, setGoals] = useState([]);
   const [customCategories, setCustomCategories] = useState([]);
   const [income, setIncome] = useState(null);
+  const [balance, setBalance] = useState(null);
+  const [totalMonthlyExpenses, setTotalMonthlyExpenses] = useState(0);
 
   const refetch = () => _refetch((prev) => !prev);
 
@@ -39,8 +41,9 @@ export const UserProvider = ({ children }) => {
         setUser(data);
         setIsLoggedIn(true);
 
-        const expensesResponse = await axiosInstance.get('/expenses/expenses');
-        setExpenses(expensesResponse.data);
+        const expensesResponse = await axiosInstance.get('/expenses/expensereport');
+        setExpenses(expensesResponse.data.expenses);
+        setTotalMonthlyExpenses(expensesResponse.data.totalExpenses);
 
         const customCatResponse = await axiosInstance.get('/user/customcategoryfetch');
         setCustomCategories(customCatResponse.data.customCategories);
@@ -63,8 +66,11 @@ export const UserProvider = ({ children }) => {
   }, [shouldRefetch]);
 
   useEffect(() => {
-    console.log('Updated income:', income);
-  }, [income]);
+  if (income !== null) {
+    const calculatedBalance = income - totalMonthlyExpenses;
+    setBalance(calculatedBalance);
+  }
+}, [income, totalMonthlyExpenses]);
 
   const updateIncome = async (newIncome) => {
     try {
@@ -77,7 +83,7 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ user, setUser, isLoggedIn, refetch, logout, expenses, setExpenses, subscriptions, setSubscriptions, goals, setGoals, customCategories, setCustomCategories, income, setIncome, updateIncome }}>
+    <UserContext.Provider value={{ user, setUser, isLoggedIn, refetch, logout, expenses, setExpenses, subscriptions, setSubscriptions, goals, setGoals, customCategories, setCustomCategories, income, setIncome, updateIncome, balance, setBalance }}>
       {children}
     </UserContext.Provider>
   );

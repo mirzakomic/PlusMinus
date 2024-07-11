@@ -5,13 +5,13 @@ import mailgun from 'mailgun.js';
 import dotenv from "dotenv"
 import path from 'path';
 
-const mailgun = new mailgun(FormData);
+const Mailgun = new mailgun(FormData);
 
 const __dirname = path.resolve();
 const envPath = `.env.${process.env.NODE_ENV || 'development'}`;
 dotenv.config({ path: path.join(__dirname, envPath) });
 
-const mg = mailgun.client({
+const mg = Mailgun.client({
   key: process.env.MAILGUN_SENDING_KEY,
   domain: process.env.MAILGUN_DOMAIN,
   username: 'api'

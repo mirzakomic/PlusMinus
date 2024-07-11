@@ -36,7 +36,7 @@ export default function Signup({onSignupSuccess}) {
       <input name="email" type="text" placeholder="your email" />
       <input name="password" type="password" placeholder="***********" />
       {error && <small style={{ color: "red" }}>{error}</small>}
-      <Button type="submit" variant="primary" size="big">Create account</Button>
+      <Button showToast={true} toastText="User has been created" type="submit" variant="primary" size="big">Create account</Button>
     </form>
   );
 }

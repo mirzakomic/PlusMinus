@@ -60,7 +60,7 @@ const Goals = () => {
           value={newGoal.targetDate}
           onChange={(e) => setNewGoal({ ...newGoal, targetDate: e.target.value })}
         />
-        <Button type="submit">Add Goal</Button>
+        <Button showToast="true" toastText="Goal has been added" type="submit">Add Goal</Button>
       </form>
 
       <div className="goals-list">

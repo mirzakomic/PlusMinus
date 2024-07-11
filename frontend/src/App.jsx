@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useContext } from "react";
 
 import { UserContext } from "./providers/UserContext";
+import { ToastContainer } from 'react-toastify';
 
 // Routes
 import Home from "./pages/Home";
@@ -37,6 +38,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/passwordReset" element={<ResetPassword />} />
         </Routes>
+        <ToastContainer />
       </main>
     </div>
   );

@@ -33,6 +33,7 @@ export const userSchema = new Schema({
   customCategories: { type: [String], default: [] },
   initialBalance: { type: Number, default: 0 },
   monthlyIncome: { type: Number, default: 0 },
+  balance: { type: Number, default: 0 },
 });
 
 userSchema.methods.setPassword = function (password) {

@@ -42,6 +42,9 @@ console.log(`Mailgun domain: ${process.env.MAILGUN_DOMAIN}`);
   expensesRouter.get('/expenses', authenticateToken, async (req, res) => {
     try {
       const expenses = await Expense.find({ user: req.user.id });
+      if(!expenses) {
+        res.send("no expenses")
+      }
       res.send(expenses);
     } catch (error) {
       res.status(500).send({ error: 'Failed to fetch expenses' });
@@ -50,6 +53,9 @@ console.log(`Mailgun domain: ${process.env.MAILGUN_DOMAIN}`);
 
 expensesRouter.post('/expenses', authenticateToken, async (req, res) => {
   const { category, description, amount } = req.body;
+  const currentDate = new Date();
+  const month = currentDate.getMonth() + 1;
+  const year = currentDate.getFullYear();
   try {
     const user = await User.findById(req.user.id);
 
@@ -58,7 +64,7 @@ expensesRouter.post('/expenses', authenticateToken, async (req, res) => {
     }
 
     // Create new expense
-    const expense = new Expense({ category, description, amount, user: req.user.id });
+    const expense = new Expense({ category, description, amount, user: req.user.id, month, year });
     await expense.save();
 
     // Update user balance
@@ -82,12 +88,12 @@ expensesRouter.get('/expensereport', authenticateToken, async (req, res) => {
     end.setMonth(start.getMonth() + 1);
 
     const expenses = await Expense.find({
-      userId,
+      user: userId,
       date: { $gte: start, $lt: end }
     });
 
     const totalExpenses = expenses.reduce((acc, expense) => acc + expense.amount, 0);
-    res.status(200).json({ totalExpenses });
+    res.status(200).json({ totalExpenses, expenses });
   } catch (error) {
     res.status(500).send({ error: 'Failed to fetch monthly expenses' });
   }
@@ -157,7 +163,7 @@ expensesRouter.get('/expensereport', authenticateToken, async (req, res) => {
     }
   });
   
-  // Goals Routes
+  //! Goals Routes
   expensesRouter.post('/goals', authenticateToken, async (req, res) => {
     const { name, targetAmount, targetDate } = req.body;
     try {

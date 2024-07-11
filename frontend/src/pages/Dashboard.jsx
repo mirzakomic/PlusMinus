@@ -7,7 +7,7 @@ import Background from '../assets/images/meshgradientbg.svg'
 
 const Dashboard = () => {
   const { user, setUser, expenses, setExpenses, subscriptions, setSubscriptions, customCategories,
-    setCustomCategories, income } = useContext(UserContext);
+    setCustomCategories, income, setIncome, balance, refetch } = useContext(UserContext);
   const [newExpense, setNewExpense] = useState({ category: '', description: '', amount: '' });
   const [showSubscriptions, setShowSubscriptions] = useState(false);
   const [showAddCustomCat, setShowAddCustomCat] = useState(false);
@@ -20,6 +20,15 @@ useEffect(() => {
     setCategories([...predefinedCategories, ...customCategories]);
   }, [customCategories]);
 
+  const handleDelete = async (id) => {
+    try {
+      await axiosInstance.delete(`/expenses/expenses/${id}`);
+      setExpenses(expenses.filter(expense => expense._id !== id));
+    } catch (error) {
+      console.error('Error deleting expense:', error);
+    }
+  };
+
   const addExpense = async (e) => {
     e.preventDefault();
     try {
@@ -27,6 +36,7 @@ useEffect(() => {
       setExpenses([...expenses, response.data.expense]);
       setNewExpense({ category: '', description: '', amount: '' });
       setUser({ ...user, balance: response.data.newBalance });
+      await refetch();
     } catch (error) {
       console.error('Error adding expense:', error);
     }
@@ -49,12 +59,6 @@ useEffect(() => {
 
   const toggleSubscriptions = () => setShowSubscriptions(!showSubscriptions);
   const toggleAddCustomCat = () => setShowAddCustomCat(!showAddCustomCat);
-
-    // Calculate total expenses
-    const totalExpenses = expenses.reduce((acc, expense) => acc + parseFloat(expense.amount || 0), 0);
-
-    // Calculate balance
-    const balance = income ? (income - totalExpenses) : -totalExpenses;
 
   return (
     <div className="dashboard">
@@ -82,7 +86,7 @@ useEffect(() => {
         value={customCategory}
         onChange={(e) => setCustomCategory(e.target.value)}
       />
-        <Button type="button" onClick={addCustomCategory}>
+        <Button showToast={true} toastText="Category has been added" type="button" onClick={addCustomCategory}>
           Add Custom Category
         </Button>
         </>
@@ -100,7 +104,7 @@ useEffect(() => {
           value={newExpense.amount}
           onChange={(e) => setNewExpense({ ...newExpense, amount: e.target.value })}
         />
-        <Button type="submit">Add Expense</Button>
+        <Button showToast={true} toastText="Expense has been added" type="submit">Add Expense</Button>
       </form>
       </div>
 
@@ -110,17 +114,17 @@ useEffect(() => {
 
       {showSubscriptions && (
         <div className="subscriptions">
-          {/* Subscriptions management logic */}
+          {/* Subscriptions management logic todo */}
         </div>
       )}
 
 <h3>Monthly Income:</h3>
       <h3>{income}</h3>
       <h3>Balance:</h3>
-      <h3>{balance}</h3> {/* Display the calculated balance */}
+      <h3>{balance}</h3>
       <div className="expenses-list">
         {expenses.map((expense) => (
-          <ListItem key={expense._id} fields={expenseFields} data={expense} />
+          <ListItem key={expense._id} fields={expenseFields} data={expense} onDelete={handleDelete} />
         ))}
       </div>
     </div>

@@ -1,8 +1,8 @@
 import express from 'express';
 import Income from './models/incomeModel.js';
-import authenticateToken from './middlewares/authenticateToken.js';
+import { authenticateToken } from "./authToken.js";
 
-const incomeRouter = express.Router();
+export const incomeRouter = express.Router();
 
 incomeRouter.get('/incomefetch', authenticateToken, async (req, res) => {
   try {
