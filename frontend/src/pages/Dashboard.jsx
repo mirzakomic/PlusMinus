@@ -7,13 +7,14 @@ import Background from '../assets/images/meshgradientbg.svg'
 
 const Dashboard = () => {
   const { user, setUser, expenses, setExpenses, subscriptions, setSubscriptions, customCategories,
-    setCustomCategories, income, setIncome, balance, refetch } = useContext(UserContext);
+    setCustomCategories, income, setIncome, balance, goals, refetch } = useContext(UserContext);
   const [newExpense, setNewExpense] = useState({ category: '', description: '', amount: '' });
   const [showSubscriptions, setShowSubscriptions] = useState(false);
   const [showAddCustomCat, setShowAddCustomCat] = useState(false);
   const [customCategory, setCustomCategory] = useState('');
   const [categories, setCategories] = useState([]);
   const expenseFields = ['category', 'description', 'amount']; 
+  const goalFields = ['name', 'targetAmount', 'installments', 'monthlyInstallment']; 
   const predefinedCategories = ['Food', 'Transport', 'Entertainment', 'Utilities', 'Health', 'Education'];
 
 useEffect(() => {
@@ -125,6 +126,10 @@ useEffect(() => {
       <div className="expenses-list">
         {expenses.map((expense) => (
           <ListItem key={expense._id} fields={expenseFields} data={expense} onDelete={handleDelete} />
+        ))}
+        <h3>Monthly installments</h3>
+        {goals.map((goal) => (
+          <ListItem key={goal._id} fields={goalFields} data={goal} onDelete={handleDelete} />
         ))}
       </div>
     </div>

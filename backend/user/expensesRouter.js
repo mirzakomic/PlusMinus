@@ -111,12 +111,24 @@ expensesRouter.get('/expensereport', authenticateToken, async (req, res) => {
     }
   });
   
-  expensesRouter.delete('/expenses/:id', authenticateToken, async (req, res) => {
+  expensesRouter.delete('/expenses/:id', async (req, res) => {
     const { id } = req.params;
     try {
+      const expense = await Expense.findById(id);
+      if (!expense) {
+        return res.status(404).send({ error: 'Expense not found' });
+      }
+      const user = await User.findById(expense.user);
+      if (!user) {
+        return res.status(404).send({ error: 'User not found' });
+      }
+      // Re-add the amount to the user's balance
+      user.balance += expense.amount;
+      await user.save();
       await Expense.findByIdAndDelete(id);
-      res.send({ message: 'Expense deleted' });
+      res.send({ message: 'Expense deleted and balance updated' });
     } catch (error) {
+      console.error('Error deleting expense:', error);
       res.status(500).send({ error: 'Failed to delete expense' });
     }
   });
@@ -165,9 +177,10 @@ expensesRouter.get('/expensereport', authenticateToken, async (req, res) => {
   
   //! Goals Routes
   expensesRouter.post('/goals', authenticateToken, async (req, res) => {
-    const { name, targetAmount, targetDate } = req.body;
+    const { name, targetAmount, installments } = req.body;
     try {
-      const goal = new Goal({ name, targetAmount, targetDate, user: req.user.id });
+      const monthlyInstallment = targetAmount / installments;
+      const goal = new Goal({ name, targetAmount, installments, monthlyInstallment, user: req.user.id });
       await goal.save();
       res.status(201).send(goal);
     } catch (error) {
@@ -186,9 +199,14 @@ expensesRouter.get('/expensereport', authenticateToken, async (req, res) => {
   
   expensesRouter.put('/goals/:id', authenticateToken, async (req, res) => {
     const { id } = req.params;
-    const { name, targetAmount, currentAmount, targetDate } = req.body;
+    const { name, targetAmount, installments } = req.body;
     try {
-      const goal = await Goal.findByIdAndUpdate(id, { name, targetAmount, currentAmount, targetDate }, { new: true });
+      const monthlyInstallment = targetAmount / installments;
+      const goal = await Goal.findByIdAndUpdate(
+        id,
+        { name, targetAmount, installments, monthlyInstallment },
+        { new: true }
+      );
       res.send(goal);
     } catch (error) {
       res.status(500).send({ error: 'Failed to update goal' });

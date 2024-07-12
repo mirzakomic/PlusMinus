@@ -4,6 +4,10 @@ import mongoose from "mongoose";
 import path from "path";
 import cookieParser from "cookie-parser";
 import cors from 'cors';
+import cron from 'node-cron';
+import User from './user/models/userModel.js';
+import Goal from './user/models/goalModel.js';
+
 import { userRouter } from "./user/routes.js";
 import { expensesRouter } from "./user/expensesRouter.js";
 import { incomeRouter } from "./user/incomeRoutes.js";
@@ -56,6 +60,24 @@ app.use(express.static(ReactAppDistPath));
 app.use("/api/user", userRouter);
 app.use("/api/expenses", expensesRouter);
 app.use("/api/income", incomeRouter);
+
+cron.schedule('0 0 1 * *', async () => {
+  console.log('Running monthly goal deductions');
+  try {
+    const users = await User.find({});
+    for (const user of users) {
+      const goals = await Goal.find({ user: user._id });
+      for (const goal of goals) {
+        console.log(`Deducting ${goal.monthlyInstallment} from user ${user._id} for goal ${goal._id}`);
+        user.balance -= goal.monthlyInstallment;
+        await user.save();
+      }
+    }
+    console.log('Monthly goal deductions completed');
+  } catch (error) {
+    console.error('Error during monthly goal deductions:', error);
+  }
+});
 
 app.get("/api/status", (req, res) => {
   res.send({ status: "Ok" });

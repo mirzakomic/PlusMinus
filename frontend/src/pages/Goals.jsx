@@ -9,10 +9,10 @@ const Goals = () => {
   const [newGoal, setNewGoal] = useState({
     name: '',
     targetAmount: '',
-    currentAmount: 0,
-    targetDate: ''
+    installments: ''
   });
-  const goalFields = ['name', 'targetAmount', 'currentAmount', 'targetDate']; 
+  const goalFields = ['name', 'targetAmount', 'installments', 'monthlyInstallment']; 
+
 
   const addGoal = async (e) => {
     e.preventDefault();
@@ -23,20 +23,19 @@ const Goals = () => {
       setNewGoal({
         name: '',
         targetAmount: '',
-        currentAmount: 0,
-        targetDate: ''
+        installments: ''
       });
     } catch (error) {
-      console.error('Error adding expense:', error);
+      console.error('Error adding goal:', error);
     }
   };
 
   const handleDelete = async (id) => {
     try {
       await axiosInstance.delete(`/expenses/goals/${id}`);
-      setGoals(goals.filter(goals => goals._id !== id));
+      setGoals(goals.filter(goal => goal._id !== id));
     } catch (error) {
-      console.error('Error deleting goals:', error);
+      console.error('Error deleting goal:', error);
     }
   };
 
@@ -58,17 +57,11 @@ const Goals = () => {
         />
         <input
           type="number"
-          placeholder="Current Amount"
-          value={newGoal.currentAmount}
-          onChange={(e) => setNewGoal({ ...newGoal, currentAmount: e.target.value })}
+          placeholder="Installments (Months)"
+          value={newGoal.installments}
+          onChange={(e) => setNewGoal({ ...newGoal, installments: e.target.value })}
         />
-        <input
-          type="date"
-          placeholder="Target Date"
-          value={newGoal.targetDate}
-          onChange={(e) => setNewGoal({ ...newGoal, targetDate: e.target.value })}
-        />
-        <Button showToast="true" toastText="Goal has been added" type="submit">Add Goal</Button>
+        <Button showToast={true} toastText="Goal has been added" type="submit">Add Goal</Button>
       </form>
 
       <div className="goals-list">
