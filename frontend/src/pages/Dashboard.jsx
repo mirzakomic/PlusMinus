@@ -4,10 +4,11 @@ import axiosInstance from '../utils/axiosInstance';
 import Button from '../components/Button';
 import ListItem from '../components/ListItem';
 import Background from '../assets/images/meshgradientbg.svg'
+import Loader from '../components/Loader';
 
 const Dashboard = () => {
   const { user, setUser, expenses, setExpenses, subscriptions, setSubscriptions, customCategories,
-    setCustomCategories, income, setIncome, balance, goals, refetch } = useContext(UserContext);
+    setCustomCategories, income, setIncome, balance, goals, refetch, isLoading } = useContext(UserContext);
   const [newExpense, setNewExpense] = useState({ category: '', description: '', amount: '' });
   const [showSubscriptions, setShowSubscriptions] = useState(false);
   const [showAddCustomCat, setShowAddCustomCat] = useState(false);
@@ -61,6 +62,7 @@ useEffect(() => {
   const toggleSubscriptions = () => setShowSubscriptions(!showSubscriptions);
   const toggleAddCustomCat = () => setShowAddCustomCat(!showAddCustomCat);
 
+  if (isLoading) return <Loader />;
   return (
     <div className="dashboard">
       <h1>Financial Dashboard</h1>

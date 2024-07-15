@@ -22,6 +22,7 @@ export default function Login() {
       if (data) {
         refetch();
         console.log("navigiert jetzt");
+        console.log(data);
         nav("/dashboard");
       } 
       console.log( "no data");
@@ -32,7 +33,7 @@ export default function Login() {
   };
 
   return (
-    <form id="auth" className="flex flex-col gap-4" onSubmit={submit}>
+    <form id="auth_signin" className="flex flex-col gap-4" onSubmit={submit}>
       <h2 className="text-2xl text-secondary font-light">Log in with your account</h2>
       <input name="email" type="email" placeholder="your email" />
       <input name="password" type="password" placeholder="***********" />

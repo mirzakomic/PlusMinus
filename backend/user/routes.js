@@ -107,7 +107,7 @@ const handleRegistration = async (req, res) => {
 
     const confirmationLink = `${process.env.BASE_FE_URL}/verify-email?token=${verificationToken}`;
     const message = {
-      from: 'Mailgun Sandbox <postmaster@sandbox94b8b558c0274ec0bce2159e5f7f1c15.mailgun.org>',
+      from: 'Excited User <mailgun@sandbox1d658a506a3744608ddf8fba66ebb4e8.mailgun.org>',
       to: email,
       subject: 'Email Confirmation',
       text: `Please confirm your email by clicking the link: ${confirmationLink}`,

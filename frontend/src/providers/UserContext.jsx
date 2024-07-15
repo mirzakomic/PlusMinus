@@ -1,14 +1,16 @@
 import { useNavigate } from 'react-router-dom';
 import { createContext, useEffect, useState } from 'react';
 import axiosInstance from '../utils/axiosInstance';
+import Loader from  '../components/Loader'
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [shouldRefetch, _refetch] = useState(true);
   const [user, setUser] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   //* Finance States
   const [expenses, setExpenses] = useState([]);
@@ -36,6 +38,7 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchUserData = async () => {
+      setIsLoading(true);
       try {
         const { data } = await axiosInstance.get('/user/secure');
         setUser(data);
@@ -60,6 +63,9 @@ export const UserProvider = ({ children }) => {
       } catch (error) {
         setUser(null);
         setIsLoggedIn(false);
+        console.error("Error fetching user data: ", error);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchUserData();
@@ -83,7 +89,7 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ user, setUser, isLoggedIn, refetch, logout, expenses, setExpenses, subscriptions, setSubscriptions, goals, setGoals, customCategories, setCustomCategories, income, setIncome, updateIncome, balance, setBalance }}>
+    <UserContext.Provider value={{ user, setUser, isLoggedIn, refetch, logout, expenses, setExpenses, subscriptions, setSubscriptions, goals, setGoals, customCategories, setCustomCategories, income, setIncome, updateIncome, balance, setBalance, isLoading }}>
       {children}
     </UserContext.Provider>
   );
